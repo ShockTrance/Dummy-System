@@ -10,7 +10,8 @@
 extern int connectToServer( char *, int );
 
 // user_io.c function prototypes
-extern void getServer( char * );
+extern void getChannels( char ** );
 extern void getPort( int * );
+extern void getServer( char * );
 
 #endif
