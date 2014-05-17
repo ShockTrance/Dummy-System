@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 #include "misc.h"
 
@@ -10,9 +11,12 @@ void getChannels (
 	
 	unsigned i = 0;
 	
+	fgetc(stdin);
+	
 	while ( i < MAX_CHANNELS )
 	{
-		fprintf( stdout, "\nEnter channel (%d left; $ to stop): ", MAX_CHANNELS - i );
+		fprintf( stdout, "Enter channel (%d left; $ to stop): ", MAX_CHANNELS - i );
+		
 		if ( NULL == fgets( chans[i], BUFFER_SIZE, stdin ) )
 		{
 			perror( "fgets error" );

@@ -7,7 +7,7 @@
 #define MAX_CHANNELS 5
 
 // network.c function prototypes
-extern int connectToServer( char *, int );
+extern int connectToServer( const char *, int );
 
 // user_io.c function prototypes
 extern void getChannels( char ** );

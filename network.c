@@ -5,6 +5,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "misc.h"
 
 typedef struct sockaddr sockaddr;
@@ -56,7 +57,7 @@ int connectToServer (
 			
 			addr_in->sin_family = PF_INET;
 			addr_in->sin_port = htons( port );
-			addr_in->sin_addr = htonl( ((sockaddr_in *) list->ai_addr)->sin_addr );
+			addr_in->sin_addr = ((sockaddr_in *) list->ai_addr)->sin_addr;
 			
 			conn_addr = (sockaddr *) addr_in;
 		}
@@ -64,9 +65,9 @@ int connectToServer (
 		{
 			addr_in6 = calloc( 1, sizeof(sockaddr_in6) );
 			
-			addr_in6->sin_family = PF_INET6;
-			addr_in6->sin_port = htons( port );
-			addr_in6->sin_addr = htonl( ((sockaddr_in6 *) list->ai_addr)->sin6_addr );
+			addr_in6->sin6_family = PF_INET6;
+			addr_in6->sin6_port = htons( port );
+			addr_in6->sin6_addr = ((sockaddr_in6 *) list->ai_addr)->sin6_addr;
 			
 			conn_addr = (sockaddr *) addr_in6;
 		}
