@@ -2,22 +2,39 @@
 #include <assert.h>
 #include "misc.h"
 
-/* Function name: getServer
- * Purpose: Retrieve the URL or IP address of an IRC server to which the
- * 			bot will connect.
- * Return value: None.
- */
-void getServer ( 
-				char * server // buffer of length BUFFER_SIZE for the user input
-			   )
+void getChannels (
+					char ** chans // input buffer (size MAX_CHANNELS * BUFFER_SIZE)
+				 )
 {
-	assert( NULL != server );
-
-	fprintf( stdout, "Enter server: " );
-	if ( NULL == fgets( server, BUFFER_SIZE, stdin ) )
+	assert( NULL != chans );
+	
+	unsigned i = 0;
+	
+	while ( i < MAX_CHANNELS )
 	{
-		perror( "fgets error" );
-		exit( EXIT_FAILURE );
+		fprintf( stdout, "\nEnter channel (%d left; $ to stop): ", MAX_CHANNELS - i );
+		if ( NULL == fgets( chans[i], BUFFER_SIZE, stdin ) )
+		{
+			perror( "fgets error" );
+			exit( EXIT_FAILURE );
+		}
+		
+		if ( '$' == chans[i][0] )
+		{
+			// This might be changed in the future, since you don't have to 
+			// connect to a channel to remain connected to an IRC server,
+			// but I'll leave it this way for the time being.  I can't see 
+			// much use of a bot connecting to a server and not joining a 
+			// channel.
+			if ( 0 == i ) 
+			{
+				fprintf( stdout, "At least one channel must be specified\n" );
+				continue;
+			}
+			else break;
+		}
+		
+		i++;
 	}
 }
 
@@ -26,7 +43,7 @@ void getServer (
  * Return value: None.
  */
 void getPort (
-				int * port // buffer for the user input
+				int * port // input buffer
 			 )
 {
 	assert( NULL != port );
@@ -46,3 +63,23 @@ void getPort (
 		else if ( MAX_PORT < *port ) fprintf( stdout, "Port must be less than %d\n", MAX_PORT );
 	}
 }
+
+/* Function name: getServer
+ * Purpose: Retrieve the URL or IP address of an IRC server to which the
+ * 			bot will connect.
+ * Return value: None.
+ */
+void getServer ( 
+				char * server // input buffer (size BUFFER_SIZE)
+			   )
+{
+	assert( NULL != server );
+
+	fprintf( stdout, "Enter server: " );
+	if ( NULL == fgets( server, BUFFER_SIZE, stdin ) )
+	{
+		perror( "fgets error" );
+		exit( EXIT_FAILURE );
+	}
+}
+

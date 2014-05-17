@@ -1,10 +1,9 @@
 #include <stdlib.h>
-#include <pthread.h>
 #include "misc.h"
 
 int main( int argc, char ** argv )
 {
-	char server[BUFFER_SIZE] = {0};
+	char server[BUFFER_SIZE] = {0}, chans[MAX_CHANNELS][BUFFER_SIZE] = {0};
 	int port = 0, socket = -1;
 	
 	// We need to connect to at least one server for the program to continue,
@@ -13,12 +12,15 @@ int main( int argc, char ** argv )
 	{
 		getServer( server );
 		getPort( &port );
+		
+		// The user must specify the channel(s) that they intend to join 
+		// before the connection is established so that the connection
+		// doesn't time out due to the program waiting for input.
+		// Note that this may be changed if the program's flow is reorganized.
+		getChannels( chans );
 	
 		socket = connectToServer( server, port );
 	}
-	
-	int count = 0;
-	pthread_t threads[MAX_THREAD_COUNT] = {0};
 
 	return EXIT_SUCCESS;
 }
