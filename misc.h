@@ -6,6 +6,14 @@
 #define MAX_THREAD_COUNT 10
 #define MAX_CHANNELS 5
 
+typedef struct
+{
+	int sockfd;
+} thread_args;
+
+// irc.c function prototypes
+extern void sendPong( const char *, int );
+
 // network.c function prototypes
 extern int connectToServer( const char *, int );
 
@@ -13,5 +21,8 @@ extern int connectToServer( const char *, int );
 extern void getChannels( char ** );
 extern void getPort( int * );
 extern void getServer( char * );
+
+// thread_loop.c function prototypes
+extern void * connectedLoop( void * );
 
 #endif

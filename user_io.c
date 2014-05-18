@@ -3,6 +3,11 @@
 #include <assert.h>
 #include "misc.h"
 
+/* Function name: getChannels
+ * Purpose: Retrieve from the user up to MAX_CHANNELS channel to join once 
+ *			the program connects to the current server.
+ * Return value: None.
+ */
 void getChannels (
 					char ** chans // input buffer (size MAX_CHANNELS * BUFFER_SIZE)
 				 )
