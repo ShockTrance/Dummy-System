@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include "misc.h"
 
+#include <string.h>
+
 typedef struct sockaddr sockaddr;
 typedef struct sockaddr_in sockaddr_in;
 typedef struct sockaddr_in6 sockaddr_in6;
@@ -25,17 +27,32 @@ int connectToServer (
 					)
 {
 	addrinfo * list = NULL;
+	int ret_val = 0;
+	
+	ret_val = getaddrinfo( server, NULL, NULL, &list );
 
-	if ( 0 > getaddrinfo( server, NULL, NULL, &list ) )
+	if ( 0 == ret_val );
+	else
 	{
-		perror( "getaddrinfo error" );
+		fprintf( stdout, "getaddrinfo returned %d\n", ret_val );
+	
+		//perror( "getaddrinfo error" );
+		if (ret_val == EAI_SYSTEM)
+        {
+            perror("getaddrinfo");
+        }
+        else
+        {
+            fprintf(stderr, "error in getaddrinfo: %s\n", gai_strerror(ret_val));
+        }   
+		
 		exit( EXIT_FAILURE );
 	}
 	
 	sockaddr * conn_addr = NULL;
 	sockaddr_in * addr_in = NULL;
 	sockaddr_in6 * addr_in6 = NULL;
-	int sockfd = 0;
+	int sockfd = -1;
 	
 	while ( NULL != list )
 	{

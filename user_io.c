@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <ctype.h>
 #include "misc.h"
 
 /* Function name: getChannels
@@ -15,8 +16,6 @@ void getChannels (
 	assert( NULL != chans );
 	
 	unsigned i = 0;
-	
-	fgetc(stdin);
 	
 	while ( i < MAX_CHANNELS )
 	{
@@ -83,12 +82,21 @@ void getServer (
 			   )
 {
 	assert( NULL != server );
-
+	
+	char temp[BUFFER_SIZE] = {0};
+	unsigned pos = 0;
+	
 	fprintf( stdout, "Enter server: " );
-	if ( NULL == fgets( server, BUFFER_SIZE, stdin ) )
+	if ( NULL == fgets( temp, BUFFER_SIZE, stdin ) )
 	{
 		perror( "fgets error" );
 		exit( EXIT_FAILURE );
+	}
+	
+	while ( !isspace( temp[pos] ) )
+	{
+		server[pos] = temp[pos];
+		pos++;
 	}
 }
 
