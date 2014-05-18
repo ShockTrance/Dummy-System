@@ -4,6 +4,7 @@
 #include <string.h>
 #include <assert.h>
 #include <ctype.h>
+#include <unistd.h>
 #include <sys/socket.h>
 #include "misc.h"
 
@@ -62,8 +63,9 @@ void * connectedLoop( void * args )
 	char * input = calloc( BUFFER_SIZE, sizeof(char) );
 	char * tmpInput = NULL;
 	char * curr = calloc( BUFFER_SIZE, sizeof(char) );
-	unsigned pos = 0;
+	unsigned pos = 0, i = 0;
 	int len = 0;
+	bool init_ping_sent = false;
 	
 	while ( *connected )
 	{
@@ -83,9 +85,23 @@ void * connectedLoop( void * args )
 		
 			if ( 0 == strncmp( (const char *) curr, "PING", pos ) )
 			{
-				fprintf( stdout, "Sending pong...\n" );
-				sendPong( curr, socket );	
-				fprintf( stdout, "Pong sent.\n" );
+				sendPong( curr, socket );
+				
+				// The server doesn't allow us to start joining channels until
+				// after we respond to the initial PING message.
+				if ( !init_ping_sent )
+				{
+					sleep(1);
+				
+					for ( i = 0; i < MAX_CHANNELS; ++i )
+					{
+						if ( '\0' == param->chans[i][0] ) break;
+						else if ( '$' == param->chans[i][0] ) break;
+						else joinChannel( (const char *) param->chans[i], socket );
+					}
+					
+					init_ping_sent = true;
+				}
 			}
 			
 			tmpInput = &tmpInput[len];

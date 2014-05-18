@@ -25,6 +25,26 @@ unsigned getCommandEndPos (
 	return ret;
 }
 
+/* Function name: joinChannel
+ * Purpose: Sends a JOIN <channel> command to the IRC server.
+ * Return value: None.
+ */
+void joinChannel (
+					const char * chan, // name of the channel to join
+					int sockfd // socket file descriptor for the connection
+				 )
+{
+	char output[BUFFER_SIZE] = {0};
+	
+	sprintf( output, "JOIN %s\r\n", chan );
+	
+	if ( 0 > send( sockfd, output, strlen( output ), 0 ) )
+	{
+		perror( "send error" );
+		pthread_exit( NULL );
+	}
+}
+
 /* Function name: sendNick
  * Purpose: Sends a message to the IRC server specifying the new nickname
  *			to be used by the program.

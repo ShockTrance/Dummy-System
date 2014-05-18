@@ -24,6 +24,7 @@ typedef struct
 
 // irc.c function prototypes
 extern unsigned getCommandEndPos( const char * );
+extern void joinChannel( const char *, int );
 extern void sendNick( const char *, int );
 extern void sendPong( const char *, int );
 extern void sendUser( const char *, const char *, int );
